@@ -100,7 +100,7 @@ export const copy = {
       },
       {
         q: "Who pays for this?",
-        a: "Hiring organizations. They pay a success fee only when they hire someone through the program, and that covers the stipends and our costs. Candidates pay nothing.",
+        a: "Hiring organizations and career transition grants. Orgs pay a success fee when they hire someone through the program. When there's no hire, grant funding covers the stipend. Candidates are paid either way, and never pay us anything.",
       },
       {
         q: "Is this remote?",
