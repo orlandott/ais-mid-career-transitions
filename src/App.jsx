@@ -36,9 +36,9 @@ function BulletList({ items }) {
   );
 }
 
-// True while a URL above is still the unswapped placeholder. Tally serves its
-// own 404 page for a form ID that doesn't exist, so show a neutral panel until
-// the real embed URLs are in place.
+// True while a URL above is still the unswapped placeholder. A form is only
+// rendered once its real embed URL is in place; until then the section falls
+// back to an email link.
 function isPlaceholder(src) {
   return src.includes("TALLY_ORG_FORM_ID") || src.includes("TALLY_CANDIDATE_FORM_ID");
 }
@@ -46,22 +46,25 @@ function isPlaceholder(src) {
 function TallyEmbed({ src, title }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {isPlaceholder(src) ? (
-        <div className="flex h-[540px] flex-col items-center justify-center gap-2 bg-slate-50 px-6 text-center">
-          <p className="font-semibold text-slate-700">{title}</p>
-          <p className="max-w-xs text-sm text-slate-500">
-            {copy.forms.placeholder}
-          </p>
-        </div>
-      ) : (
-        <iframe
-          src={src}
-          title={title}
-          loading="lazy"
-          className="block h-[540px] w-full"
-        />
-      )}
+      <iframe
+        src={src}
+        title={title}
+        loading="lazy"
+        className="block h-[540px] w-full"
+      />
     </div>
+  );
+}
+
+function EmailCta({ label, subject }) {
+  const href = `mailto:${copy.footer.contactEmail}?subject=${encodeURIComponent(subject)}`;
+  return (
+    <a
+      href={href}
+      className="mt-8 inline-block rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
+    >
+      {label}
+    </a>
   );
 }
 
@@ -177,28 +180,46 @@ function HowItWorks() {
 }
 
 function AudienceSection({ id, content, formSrc, mirrored = false }) {
+  const hasForm = !isPlaceholder(formSrc);
+
+  const details = (
+    <div className={hasForm && mirrored ? "lg:order-2" : "max-w-2xl"}>
+      <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+        {content.heading}
+      </h2>
+      <p className="mt-4 leading-relaxed text-slate-600">{content.intro}</p>
+      <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500">
+        {content.eligibilityHeading}
+      </h3>
+      <div className="mt-4">
+        <BulletList items={content.bullets} />
+      </div>
+      {!hasForm && (
+        <EmailCta label={content.emailCta} subject={content.emailSubject} />
+      )}
+    </div>
+  );
+
   return (
     <section id={id} className="scroll-mt-20">
-      <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 sm:py-24 lg:grid-cols-2 lg:gap-16">
-        <div className={mirrored ? "lg:order-2" : ""}>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">
-            {content.heading}
-          </h2>
-          <p className="mt-4 leading-relaxed text-slate-600">{content.intro}</p>
-          <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500">
-            {content.eligibilityHeading}
-          </h3>
-          <div className="mt-4">
-            <BulletList items={content.bullets} />
+      <div
+        className={
+          "mx-auto px-5 py-20 sm:py-24 " +
+          (hasForm
+            ? "grid max-w-6xl gap-12 lg:grid-cols-2 lg:gap-16"
+            : "max-w-6xl")
+        }
+      >
+        {details}
+        {hasForm && (
+          <div className={mirrored ? "lg:order-1" : ""}>
+            <h3 className="text-lg font-semibold text-slate-900">
+              {content.formHeading}
+            </h3>
+            <p className="mb-4 mt-1 text-sm text-slate-500">{content.formNote}</p>
+            <TallyEmbed src={formSrc} title={content.formHeading} />
           </div>
-        </div>
-        <div className={mirrored ? "lg:order-1" : ""}>
-          <h3 className="text-lg font-semibold text-slate-900">
-            {content.formHeading}
-          </h3>
-          <p className="mb-4 mt-1 text-sm text-slate-500">{content.formNote}</p>
-          <TallyEmbed src={formSrc} title={content.formHeading} />
-        </div>
+        )}
       </div>
     </section>
   );
@@ -208,11 +229,11 @@ function Faq() {
   const { faq } = copy;
   return (
     <section id="faq" className="scroll-mt-20 border-t border-slate-200 bg-slate-50">
-      <div className="mx-auto max-w-3xl px-5 py-20 sm:py-24">
+      <div className="mx-auto max-w-6xl px-5 py-20 sm:py-24">
         <h2 className="text-3xl font-bold tracking-tight text-slate-900">
           {faq.heading}
         </h2>
-        <div className="mt-8 divide-y divide-slate-200">
+        <div className="mt-8 max-w-3xl divide-y divide-slate-200">
           {faq.items.map((item) => (
             <details key={item.q} className="group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-slate-900 transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">

@@ -60,6 +60,9 @@ export const copy = {
     ],
     formHeading: "Submit a role spec",
     formNote: "Takes about 10 minutes. We'll follow up within a few days.",
+    // Shown instead of the form until TALLY_ORG_FORM_URL is set.
+    emailCta: "Submit a role spec",
+    emailSubject: "Role spec",
   },
 
   candidates: {
@@ -75,6 +78,9 @@ export const copy = {
     formHeading: "Apply for a sprint",
     formNote:
       "Takes about 10 minutes. We get in touch when there's a matching role spec.",
+    // Shown instead of the form until TALLY_CANDIDATE_FORM_URL is set.
+    emailCta: "Apply for a sprint",
+    emailSubject: "Sprint application",
   },
 
   faq: {
@@ -101,10 +107,6 @@ export const copy = {
         a: "The sprint is remote, about 40 hours a week for two weeks. The role you'd be hired into follows the org's own location expectations, which are stated in every role spec.",
       },
     ],
-  },
-
-  forms: {
-    placeholder: "This form isn't connected yet. Check back shortly.",
   },
 
   footer: {
