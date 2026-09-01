@@ -1,6 +1,6 @@
 import { copy } from "./copy.js";
 
-// Placeholder Tally embed URLs — swap these for the real form links.
+// Placeholder Tally embed URLs. Swap these for the real form links.
 const TALLY_ORG_FORM_URL =
   "https://tally.so/embed/TALLY_ORG_FORM_ID?alignLeft=1&hideTitle=1&transparentBackground=1";
 const TALLY_CANDIDATE_FORM_URL =
@@ -229,7 +229,7 @@ function Footer() {
           </a>
         </p>
         <p>
-          {copy.siteName} — {footer.pilotNote}
+          {footer.pilotNote}
         </p>
       </div>
     </footer>
