@@ -103,6 +103,10 @@ export const copy = {
     ],
   },
 
+  forms: {
+    placeholder: "This form isn't connected yet. Check back shortly.",
+  },
+
   footer: {
     contactLabel: "Contact",
     contactEmail: "hello@example.com", // placeholder, swap for the real inbox

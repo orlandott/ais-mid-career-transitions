@@ -36,15 +36,31 @@ function BulletList({ items }) {
   );
 }
 
+// True while a URL above is still the unswapped placeholder. Tally serves its
+// own 404 page for a form ID that doesn't exist, so show a neutral panel until
+// the real embed URLs are in place.
+function isPlaceholder(src) {
+  return src.includes("TALLY_ORG_FORM_ID") || src.includes("TALLY_CANDIDATE_FORM_ID");
+}
+
 function TallyEmbed({ src, title }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <iframe
-        src={src}
-        title={title}
-        loading="lazy"
-        className="block h-[540px] w-full"
-      />
+      {isPlaceholder(src) ? (
+        <div className="flex h-[540px] flex-col items-center justify-center gap-2 bg-slate-50 px-6 text-center">
+          <p className="font-semibold text-slate-700">{title}</p>
+          <p className="max-w-xs text-sm text-slate-500">
+            {copy.forms.placeholder}
+          </p>
+        </div>
+      ) : (
+        <iframe
+          src={src}
+          title={title}
+          loading="lazy"
+          className="block h-[540px] w-full"
+        />
+      )}
     </div>
   );
 }
